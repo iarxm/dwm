@@ -12,8 +12,8 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_blk1 },
-	[SchemeSel]  = { col_cyan, col_blk1,  col_gray1  },
+	[SchemeNorm] = { col_gray3,  col_gray1, col_blk1 },
+	[SchemeSel]  = { col_cyan,   col_blk1,  col_gray1  },
 };
 
 static const char *tags[] = {
@@ -51,11 +51,11 @@ static const Layout layouts[] = {
 
 #define MODKEY Mod1Mask
 #define MODKY1 Mod4Mask
-#define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+#define TAGKEYS(MKEY,KEY,TAG) \
+	{ MKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+	{ MKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+	{ MKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+	{ MKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define shcmd(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, null } }
@@ -92,17 +92,17 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-    TAGKEYS(                        XK_n,                      11)
-    TAGKEYS(                        XK_b,                      15)
+	TAGKEYS(MODKEY,                 XK_1,                      0)
+	TAGKEYS(MODKEY,                 XK_2,                      1)
+	TAGKEYS(MODKEY,                 XK_3,                      2)
+	TAGKEYS(MODKEY,                 XK_4,                      3)
+	TAGKEYS(MODKEY,                 XK_5,                      4)
+	TAGKEYS(MODKEY,                 XK_6,                      5)
+	TAGKEYS(MODKEY,                 XK_7,                      6)
+	TAGKEYS(MODKEY,                 XK_8,                      7)
+	TAGKEYS(MODKEY,                 XK_9,                      8)
+    TAGKEYS(MODKY1,                 XK_n,                      11)
+    TAGKEYS(MODKY1,                 XK_b,                      15)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
