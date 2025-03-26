@@ -64,12 +64,13 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-b", "-fn", dmenufont, "-nb", col_blk1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *dmpass[]  = { "passmenu", "-b", "-l 20", "-nb", "black", "-nf", "#efef8f", "-sb", "black", "-sf", "white", NULL };
+/*static const char *dmpass[]  = { "passmenu", "-b", "-l 20", "-nb", "black", "-nf", "#efef8f", "-sb", "black", "-sf", "white", NULL };*/
+static const char *dmpass[]  = { "passmenu", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKY1,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
     { MODKY1,                       XK_p,      spawn,          {.v = dmpass } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
