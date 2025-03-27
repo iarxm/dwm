@@ -12,43 +12,31 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3,  col_gray1, col_blk1 },
+	[SchemeNorm] = { col_gray3,  col_blk1,  col_blk1 },
 	[SchemeSel]  = { col_cyan,   col_blk1,  col_gray1  },
 };
-
 static const char *tags[] = {
     "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "xoo", /* 9*/
-    "xmj", /* 10*/
-    "xml", /* 11*/
-    "xmk", /* 12*/
-    "xmr", /* 13*/
-    "xrd", /* 14*/
-    "xau", /* 15*/
-    "xsx", /* 16*/
+    "xml", /* 10*/
+    "xau", /* 11*/
+    "xrd", /* 12*/ 
+    "xmj", /* 13*/
 };
-
 static const Rule rules[] = {
-	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
-
 static const float mfact     = 0.65; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
+static const int nmaster     = 1;    /* clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
-
 static const Layout layouts[] = {
 	{ "[]=",      tile },    /* default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 };
-
 #define MODKEY Mod1Mask
 #define MODKY1 Mod4Mask
 #define TAGKEYS(MKEY,KEY,TAG) \
@@ -56,24 +44,46 @@ static const Layout layouts[] = {
 	{ MKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
-
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define shcmd(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, null } }
-
-/*static const char *dmenudef[] = { "-nb", "black", "-nf", "#efef8f", "-sb", "black", "-sf", "white" };*/
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-b", "-fn", dmenufont, "-nb", col_blk1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
-/*static const char *dmpass[]  = { "passmenu", "-b", "-l 20", "-nb", "black", "-nf", "#efef8f", "-sb", "black", "-sf", "white", NULL };*/
-static const char *dmpass[]  = { "passmenu", NULL };
-
+#define DMU_DEFS \
+    "-b", \
+    "-fn", dmenufont, \
+    "-nb", "black", \
+    "-nf", "#efef8f", \
+    "-sb", "black", \
+    "-sf", "white"
+    /*"-m", dmenumon,*/
+static const char *vol_inc[]   = { "pamixer", "--allow-boost", "-i", "5", NULL };
+static const char *vol_dec[]   = { "pamixer", "--allow-boost", "-d", "5", NULL };
+static const char *termcmd[]   = { "st", NULL };
+static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };
+static const char *dmu_cmd[]   = { "dmenu_run", DMU_DEFS, NULL };
+static const char *dmu_pas[]   = { "passmenu",  DMU_DEFS, NULL };
+static const char *dmu_blu[]   = { "dmenu-bluetooth",      "-l", "20", DMU_DEFS, NULL };
+static const char *dmu_nwm[]   = { "networkmanager_dmenu", "-l", "20", DMU_DEFS, NULL };
+static const char *app_qba[]   = { "qb", NULL };
+static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
+static const char *app_goo[]   = { "google-chrome-stable", NULL };
+static const char *app_aux[]   = { "st", "-c", "au", "-e", "vimpc", "&", NULL };
+static const char *app_mlx[]   = { "st", "-c", "mlx", "neomutt", "-e", "\"push \'<change-folder>=ii<enter>\'\"", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-    { MODKY1,                       XK_p,      spawn,          {.v = dmpass } },
+    { MODKEY|ControlMask,           XK_k,      spawn,          {.v = vol_inc } },
+	{ MODKEY|ControlMask,           XK_j,      spawn,          {.v = vol_dec } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmu_cmd } },
+    { MODKY1,                       XK_p,      spawn,          {.v = dmu_pas } },
+    { ControlMask|MODKY1,           XK_p,      spawn,          {.v = dmu_blu } },
+    { MODKY1|MODKEY,                XK_p,      spawn,          {.v = dmu_nwm } },
+	{ MODKY1,                       XK_b,      spawn,          {.v = app_qba } },
+    { MODKY1|MODKEY,                XK_b,      spawn,          {.v = app_goo } },
+	{ MODKEY,                       XK_a,      spawn,          {.v = app_gpt } },
+    { MODKY1|MODKEY,                XK_a,      spawn,          {.v = app_aux } },
+    { MODKY1|MODKEY,                XK_m,      spawn,          {.v = app_mlx } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
+	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
@@ -94,6 +104,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	TAGKEYS(MODKEY,                 XK_1,                      0)
 	TAGKEYS(MODKEY,                 XK_2,                      1)
 	TAGKEYS(MODKEY,                 XK_3,                      2)
@@ -103,13 +114,12 @@ static const Key keys[] = {
 	TAGKEYS(MODKEY,                 XK_7,                      6)
 	TAGKEYS(MODKEY,                 XK_8,                      7)
 	TAGKEYS(MODKEY,                 XK_9,                      8)
-    TAGKEYS(MODKY1,                 XK_n,                      11)
-    TAGKEYS(MODKY1,                 XK_b,                      15)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+    TAGKEYS(MODKEY,                 XK_o,                      9)  /*xoo odos*/
+    TAGKEYS(MODKY1,                 XK_m,                      10) /*xml mail/coms*/
+    TAGKEYS(MODKY1,                 XK_a,                      11) /*xau*/
+    TAGKEYS(MODKY1,                 XK_r,                      12) /*xrd*/
+    TAGKEYS(MODKY1,                 XK_o,                      13) /*xmj*/
 };
-
-/* button definitions */
-/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
@@ -124,3 +134,17 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
+/* i3 convert - todo
+bindsym Ctrl+$mdb+l       $exn mpc toggle
+bindsym $mda+s            $exn flameshot gui
+bindsym Print             $exn maimx screen
+# todo - dmenu script to select a unique screenshot method
+bindsym $mdb+p            $exn i3-dmenu-desktop --dmenu='dmenu -b $dmc'
+# float screens
+bindsym $mdb+i            $isf nnf1
+bindsym $mdb+Shift+i      $ixx nnf1
+bindsym $mda+i            $isf nnf2
+bindsym $mda+Shift+i      $ixx nnf2
+bindsym $mdb+Ctrl+i       $isf nnf3
+bindsym $mdb+Ctrl+Shift+i $ixx nnf3
+*/
