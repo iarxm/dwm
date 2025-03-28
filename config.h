@@ -55,8 +55,9 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
     "-sb", "black", \
     "-sf", "white"
     /*"-m", dmenumon,*/
-static const char *vol_inc[]   = { "pamixer", "--allow-boost", "-i", "5", NULL };
-static const char *vol_dec[]   = { "pamixer", "--allow-boost", "-d", "5", NULL };
+static const char *vol_inc[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",   NULL };
+static const char *vol_dec[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%",   NULL };
+static const char *vol_mut[]   = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
 static const char *termcmd[]   = { "st", NULL };
 static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };
 static const char *dmu_cmd[]   = { "dmenu_run", DMU_DEFS, NULL };
@@ -68,20 +69,27 @@ static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
 static const char *app_goo[]   = { "google-chrome-stable", NULL };
 static const char *app_aux[]   = { "st", "-c", "au", "-e", "vimpc", "&", NULL };
 static const char *app_mlx[]   = { "st", "-c", "mlx", "neomutt", "-e", "\"push \'<change-folder>=ii<enter>\'\"", NULL };
+static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn", "-a", NULL };
+static const char *app_nnb[]   = { "st", "-c", "nn-fl-b", "zsh", "-i", "-c", "nnn", "-a", NULL };
+static const char *app_nnc[]   = { "st", "-c", "nn-fl-c", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
     { MODKEY|ControlMask,           XK_k,      spawn,          {.v = vol_inc } },
 	{ MODKEY|ControlMask,           XK_j,      spawn,          {.v = vol_dec } },
+	{ MODKEY|ControlMask,           XK_m,      spawn,          {.v = vol_mut } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmu_cmd } },
     { MODKY1,                       XK_p,      spawn,          {.v = dmu_pas } },
     { ControlMask|MODKY1,           XK_p,      spawn,          {.v = dmu_blu } },
     { MODKY1|MODKEY,                XK_p,      spawn,          {.v = dmu_nwm } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKY1,                       XK_b,      spawn,          {.v = app_qba } },
     { MODKY1|MODKEY,                XK_b,      spawn,          {.v = app_goo } },
 	{ MODKEY,                       XK_a,      spawn,          {.v = app_gpt } },
     { MODKY1|MODKEY,                XK_a,      spawn,          {.v = app_aux } },
     { MODKY1|MODKEY,                XK_m,      spawn,          {.v = app_mlx } },
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_i,      spawn,          {.v = app_nna } },
+	{ MODKY1,                       XK_i,      spawn,          {.v = app_nnb } },
+	{ MODKEY|ControlMask,           XK_i,      spawn,          {.v = app_nnc } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -96,8 +104,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKY1,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY,                       XK_space,  view,           {0} },
+	{ MODKEY|ShiftMask,             XK_space,  setlayout,      {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -138,13 +146,6 @@ static const Button buttons[] = {
 bindsym Ctrl+$mdb+l       $exn mpc toggle
 bindsym $mda+s            $exn flameshot gui
 bindsym Print             $exn maimx screen
-# todo - dmenu script to select a unique screenshot method
+    # todo - dmenu script to select a unique screenshot method
 bindsym $mdb+p            $exn i3-dmenu-desktop --dmenu='dmenu -b $dmc'
-# float screens
-bindsym $mdb+i            $isf nnf1
-bindsym $mdb+Shift+i      $ixx nnf1
-bindsym $mda+i            $isf nnf2
-bindsym $mda+Shift+i      $ixx nnf2
-bindsym $mdb+Ctrl+i       $isf nnf3
-bindsym $mdb+Ctrl+Shift+i $ixx nnf3
 */
