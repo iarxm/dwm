@@ -60,7 +60,8 @@ static const char *vol_dec[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@",
 static const char *vol_mut[]   = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
 static const char *termcmd[]   = { "st", NULL };
 static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };
-static const char *dmu_cmd[]   = { "dmenu_run", DMU_DEFS, NULL };
+static const char *dmu_cma[]   = { "dmenu_run", DMU_DEFS, NULL };
+/*static const char *dmu_cmb[]   = { "dmenu_run", DMU_DEFS, NULL };*/
 static const char *dmu_pas[]   = { "passmenu",  DMU_DEFS, NULL };
 static const char *dmu_blu[]   = { "dmenu-bluetooth",      "-l", "20", DMU_DEFS, NULL };
 static const char *dmu_nwm[]   = { "networkmanager_dmenu", "-l", "20", DMU_DEFS, NULL };
@@ -68,16 +69,24 @@ static const char *app_qba[]   = { "qb", NULL };
 static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
 static const char *app_goo[]   = { "google-chrome-stable", NULL };
 static const char *app_aux[]   = { "st", "-c", "au", "-e", "vimpc", "&", NULL };
-static const char *app_mlx[]   = { "st", "-c", "mlx", "neomutt", "-e", "\"push \'<change-folder>=ii<enter>\'\"", NULL };
+static const char *app_mlx[]   = {
+    "st", "-c", "mlx",
+    "neomutt", "-e", "\"push", "<change-folder>=ii<enter>", "\"", NULL };
 static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const char *app_nnb[]   = { "st", "-c", "nn-fl-b", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const char *app_nnc[]   = { "st", "-c", "nn-fl-c", "zsh", "-i", "-c", "nnn", "-a", NULL };
+static const char *scr_fla[]   = { "flameshot", "gui", NULL };
+static const char *scr_mai[]   = { "maimx", "screen", NULL };
+/* todo - dmenu script to select a unique screenshot method */
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
     { MODKEY|ControlMask,           XK_k,      spawn,          {.v = vol_inc } },
 	{ MODKEY|ControlMask,           XK_j,      spawn,          {.v = vol_dec } },
 	{ MODKEY|ControlMask,           XK_m,      spawn,          {.v = vol_mut } },
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmu_cmd } },
+	{ MODKY1,                       XK_s,      spawn,          {.v = scr_fla } },
+	{ MODKEY,                       XK_s,      spawn,          {.v = scr_mai } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmu_cma } },
+/*	{ ControlMask|MODKEY,           XK_p,      spawn,          {.v = dmu_cmb } },*/
     { MODKY1,                       XK_p,      spawn,          {.v = dmu_pas } },
     { ControlMask|MODKY1,           XK_p,      spawn,          {.v = dmu_blu } },
     { MODKY1|MODKEY,                XK_p,      spawn,          {.v = dmu_nwm } },
@@ -105,6 +114,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKY1,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_space,  view,           {0} },
+	{ MODKY1,                       XK_space,  view,           {0} },
 	{ MODKEY|ShiftMask,             XK_space,  setlayout,      {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
@@ -142,10 +152,12 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-/* i3 convert - todo
-bindsym Ctrl+$mdb+l       $exn mpc toggle
-bindsym $mda+s            $exn flameshot gui
-bindsym Print             $exn maimx screen
-    # todo - dmenu script to select a unique screenshot method
-bindsym $mdb+p            $exn i3-dmenu-desktop --dmenu='dmenu -b $dmc'
+/*static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };*/
+/*static const char *dmenucmd[]  = {
+    "j4-dmenu-desktop", "-d",
+    "\"dmenu " DMU_DEFS "\"", NULL };
+static const char *dmu_cma[]   = {
+    "j4-dmenu-desktop", "--dmenu",
+    "\"dmenu " DMU_DEFS "\"", NULL };
 */
+/* #bindsym Ctrl+$mdb+l       $exn mpc toggle*/
