@@ -72,7 +72,7 @@ static const char *app_aux[]   = { "st", "-c", "au", "-e", "vimpc", "&", NULL };
 static const char *app_mlx[]   = {
     "st", "-c", "mlx",
     "neomutt", "-e", "\"push", "<change-folder>=ii<enter>", "\"", NULL };
-static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn", "-a", NULL };
+static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn", "-an", NULL };
 static const char *app_nnb[]   = { "st", "-c", "nn-fl-b", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const char *app_nnc[]   = { "st", "-c", "nn-fl-c", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const char *scr_fla[]   = { "flameshot", "gui", NULL };
