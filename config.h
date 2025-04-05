@@ -27,6 +27,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+    { "XClock",   NULL,       NULL,       ~0,            1,           -1 },
 };
 static const float mfact     = 0.65; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* clients in master area */
@@ -69,10 +70,8 @@ static const char *app_qba[]   = { "qb", NULL };
 static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
 static const char *app_goo[]   = { "google-chrome-stable", NULL };
 static const char *app_aux[]   = { "st", "-c", "au", "-e", "vimpc", "&", NULL };
-static const char *app_mlx[]   = {
-    "st", "-c", "mlx",
-    "neomutt", "-e", "\"push", "<change-folder>=ii<enter>", "\"", NULL };
-static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn", "-an", NULL };
+static const char *app_mlx[]   = { "st", "-c", "mlx", "neomutt", NULL };
+static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn -na", NULL };
 static const char *app_nnb[]   = { "st", "-c", "nn-fl-b", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const char *app_nnc[]   = { "st", "-c", "nn-fl-c", "zsh", "-i", "-c", "nnn", "-a", NULL };
 static const char *scr_fla[]   = { "flameshot", "gui", NULL };
@@ -94,11 +93,9 @@ static const Key keys[] = {
 	{ MODKY1,                       XK_b,      spawn,          {.v = app_qba } },
     { MODKY1|MODKEY,                XK_b,      spawn,          {.v = app_goo } },
 	{ MODKEY,                       XK_a,      spawn,          {.v = app_gpt } },
-    { MODKY1|MODKEY,                XK_a,      spawn,          {.v = app_aux } },
     { MODKY1|MODKEY,                XK_m,      spawn,          {.v = app_mlx } },
 	{ MODKEY,                       XK_i,      spawn,          {.v = app_nna } },
 	{ MODKY1,                       XK_i,      spawn,          {.v = app_nnb } },
-	{ MODKEY|ControlMask,           XK_i,      spawn,          {.v = app_nnc } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -161,3 +158,5 @@ static const char *dmu_cma[]   = {
     "\"dmenu " DMU_DEFS "\"", NULL };
 */
 /* #bindsym Ctrl+$mdb+l       $exn mpc toggle*/
+/*    { MODKY1|MODKEY,                XK_a,      spawn,          {.v = app_aux } },*/
+/*	{ MODKEY|ControlMask,           XK_i,      spawn,          {.v = app_nnc } },*/
