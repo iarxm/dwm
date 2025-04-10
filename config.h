@@ -1,5 +1,5 @@
 static const unsigned int borderpx  = 1;
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 32; /* snap pixel */
 static const int showbar            = 0;
 static const int topbar             = 0;
 static const char *fonts[]          = { "monospace:size=10" };
@@ -29,13 +29,13 @@ static const Rule rules[] = {
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
     { "XClock",   NULL,       NULL,       ~0,            1,           -1 },
 };
-static const float mfact     = 0.65; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const float mfact     = 0.65;
+static const int nmaster     = 1;
+static const int resizehints = 0;    /* 1: respect size hints in tiled resizals */
+static const int lockfullscreen = 1; /* 1: will force focus on the fullscreen window */
 static const Layout layouts[] = {
-	{ "[]=",      tile },    /* default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "[]=",      tile },
+	{ "><>",      NULL },
 	{ "[M]",      monocle },
 };
 #define MODKEY Mod1Mask
@@ -47,7 +47,6 @@ static const Layout layouts[] = {
 	{ MKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define shcmd(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, null } }
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 #define DMU_DEFS \
     "-b", \
     "-fn", dmenufont, \
@@ -56,46 +55,47 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
     "-sb", "black", \
     "-sf", "white"
     /*"-m", dmenumon,*/
-static const char *vol_inc[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",   NULL };
-static const char *vol_dec[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%",   NULL };
-static const char *vol_mut[]   = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
-static const char *termcmd[]   = { "st", NULL };
+static char dmenumon[2] = "0";
 static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };
+static const char *vol_inc[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",    NULL };
+static const char *vol_dec[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%",    NULL };
+static const char *vol_mut[]   = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+static const char *mpc_tog[]   = { "mpc", "toggle", NULL };
+static const char *scr_fla[]   = { "maimx", "flameshot", NULL };
+static const char *scr_mai[]   = { "maimx", "screen",    NULL };
 static const char *dmu_cma[]   = { "dmenu_run", DMU_DEFS, NULL };
-/*static const char *dmu_cmb[]   = { "dmenu_run", DMU_DEFS, NULL };*/
+static const char *dmu_cmb[]   = { "dmux", NULL };
 static const char *dmu_pas[]   = { "passmenu",  DMU_DEFS, NULL };
 static const char *dmu_blu[]   = { "dmenu-bluetooth",      "-l", "20", DMU_DEFS, NULL };
 static const char *dmu_nwm[]   = { "networkmanager_dmenu", "-l", "20", DMU_DEFS, NULL };
+static const char *termcmd[]   = { "st", NULL };
 static const char *app_qba[]   = { "qb", NULL };
 static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
-static const char *app_goo[]   = { "google-chrome-stable", NULL };
-static const char *app_aux[]   = { "st", "-c", "au", "-e", "vimpc", "&", NULL };
+static const char *app_bro[]   = { "zen-browser", NULL };
 static const char *app_mlx[]   = { "st", "-c", "mlx", "neomutt", NULL };
-static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "zsh", "-i", "-c", "nnn -na", NULL };
-static const char *app_nnb[]   = { "st", "-c", "nn-fl-b", "zsh", "-i", "-c", "nnn", "-a", NULL };
-static const char *app_nnc[]   = { "st", "-c", "nn-fl-c", "zsh", "-i", "-c", "nnn", "-a", NULL };
-static const char *scr_fla[]   = { "flameshot", "gui", NULL };
-static const char *scr_mai[]   = { "maimx", "screen", NULL };
-/* todo - dmenu script to select a unique screenshot method */
+static const char *app_nna[]   = { "st", "-c", "nn-fl-a", "nnn", "-an", NULL };
+static const char *app_nnb[]   = { "st", "-c", "nn-fl-b", "zsh", "-i", "-c", "nnn", "-an",  NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
     { MODKEY|ControlMask,           XK_k,      spawn,          {.v = vol_inc } },
 	{ MODKEY|ControlMask,           XK_j,      spawn,          {.v = vol_dec } },
 	{ MODKEY|ControlMask,           XK_m,      spawn,          {.v = vol_mut } },
+    { ControlMask|MODKEY,           XK_l,      spawn,          {.v = mpc_tog } },
 	{ MODKY1,                       XK_s,      spawn,          {.v = scr_fla } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = scr_mai } },
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmu_cma } },
-/*	{ ControlMask|MODKEY,           XK_p,      spawn,          {.v = dmu_cmb } },*/
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmu_cmb } },
+	{ ControlMask,                  XK_p,      spawn,          {.v = dmu_cma } },
     { MODKY1,                       XK_p,      spawn,          {.v = dmu_pas } },
     { ControlMask|MODKY1,           XK_p,      spawn,          {.v = dmu_blu } },
     { MODKY1|MODKEY,                XK_p,      spawn,          {.v = dmu_nwm } },
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKY1,                       XK_b,      spawn,          {.v = app_qba } },
-    { MODKY1|MODKEY,                XK_b,      spawn,          {.v = app_goo } },
+    { MODKY1|MODKEY,                XK_b,      spawn,          {.v = app_bro } },
 	{ MODKEY,                       XK_a,      spawn,          {.v = app_gpt } },
     { MODKY1|MODKEY,                XK_m,      spawn,          {.v = app_mlx } },
-	{ MODKEY,                       XK_i,      spawn,          {.v = app_nna } },
-	{ MODKY1,                       XK_i,      spawn,          {.v = app_nnb } },
+	{ MODKEY,                       XK_n,      spawn,          {.v = app_nna } },
+	{ MODKY1,                       XK_n,      spawn,          {.v = app_nnb } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -107,19 +107,17 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKY1,                       XK_Tab,    view,           {0} },
+	{ MODKEY|MODKY1,                XK_k,      zoom,           {0} },
+	{ ControlMask|MODKEY,           XK_space,  togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_space,  setlayout,      {0} },
 	{ MODKEY,                       XK_space,  view,           {0} },
 	{ MODKY1,                       XK_space,  view,           {0} },
-	{ MODKEY|ShiftMask,             XK_space,  setlayout,      {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	TAGKEYS(MODKEY,                 XK_1,                      0)
 	TAGKEYS(MODKEY,                 XK_2,                      1)
 	TAGKEYS(MODKEY,                 XK_3,                      2)
@@ -129,8 +127,8 @@ static const Key keys[] = {
 	TAGKEYS(MODKEY,                 XK_7,                      6)
 	TAGKEYS(MODKEY,                 XK_8,                      7)
 	TAGKEYS(MODKEY,                 XK_9,                      8)
-    TAGKEYS(MODKEY,                 XK_o,                      9)  /*xoo odos*/
-    TAGKEYS(MODKY1,                 XK_m,                      10) /*xml mail/coms*/
+    TAGKEYS(MODKEY,                 XK_o,                      9)  /*xoo*/
+    TAGKEYS(MODKY1,                 XK_m,                      10) /*xml ml/coms*/
     TAGKEYS(MODKY1,                 XK_a,                      11) /*xau*/
     TAGKEYS(MODKY1,                 XK_r,                      12) /*xrd*/
     TAGKEYS(MODKY1,                 XK_o,                      13) /*xmj*/
@@ -149,14 +147,3 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-/*static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };*/
-/*static const char *dmenucmd[]  = {
-    "j4-dmenu-desktop", "-d",
-    "\"dmenu " DMU_DEFS "\"", NULL };
-static const char *dmu_cma[]   = {
-    "j4-dmenu-desktop", "--dmenu",
-    "\"dmenu " DMU_DEFS "\"", NULL };
-*/
-/* #bindsym Ctrl+$mdb+l       $exn mpc toggle*/
-/*    { MODKY1|MODKEY,                XK_a,      spawn,          {.v = app_aux } },*/
-/*	{ MODKEY|ControlMask,           XK_i,      spawn,          {.v = app_nnc } },*/
