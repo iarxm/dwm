@@ -60,6 +60,7 @@ static const char *dmenucmd[]  = { "dmenu_run", DMU_DEFS, NULL };
 static const char *vol_inc[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",    NULL };
 static const char *vol_dec[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%",    NULL };
 static const char *vol_mut[]   = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+static const char *sys_sle[]   = { "systemctl", "suspend", NULL };
 static const char *mpc_tog[]   = { "mpc", "toggle", NULL };
 static const char *scr_fla[]   = { "maimx", "flameshot", NULL };
 static const char *scr_mai[]   = { "maimx", "screen",    NULL };
@@ -68,7 +69,9 @@ static const char *dmu_cmb[]   = { "dmux", NULL };
 static const char *dmu_pas[]   = { "passmenu",  DMU_DEFS, NULL };
 static const char *dmu_blu[]   = { "dmenu-bluetooth",      "-l", "20", DMU_DEFS, NULL };
 static const char *dmu_nwm[]   = { "networkmanager_dmenu", "-l", "20", DMU_DEFS, NULL };
-static const char *termcmd[]   = { "st", NULL };
+static const char *termcmd[]   = { "st", "tmux", NULL };
+static const char *trm_tmu[]   = { "st", "tmux", NULL };
+static const char *trm_bas[]   = { "st", NULL };
 static const char *app_qba[]   = { "qb", NULL };
 static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
 static const char *app_bro[]   = { "zen-browser", NULL };
@@ -96,6 +99,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_n,      spawn,          {.v = app_nna } },
 	{ MODKY1,                       XK_n,      spawn,          {.v = app_nnb } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|MODKY1,                XK_Return, spawn,          {.v = trm_bas } },
+	{ MODKEY|MODKY1,                XK_s,      spawn,          {.v = sys_sle } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
