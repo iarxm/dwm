@@ -1,0 +1,9 @@
+#!/bin/sh
+cheatsheet=${DWM_CHEAT_FILE:-@DOCDIR@/bindings.md}
+
+if [ ! -r "$cheatsheet" ]; then
+	printf '%s\n' "dwm-cheat: cannot read bindings file: $cheatsheet" >&2
+	exit 1
+fi
+
+exec less -R "$cheatsheet"
