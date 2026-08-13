@@ -1,0 +1,65 @@
+From: local configuration
+Subject: [PATCH] view previous tag set when selecting the current tag
+
+Make the primary tag key dynamic: selecting a tag that is not in view behaves
+as usual, while selecting the exact current tag set swaps back to dwm's native
+previous tag set. This intentionally delegates the swap to view({0}), so it
+also preserves pertag's previous layout, master-area, and bar state.
+
+Only the primary view binding is changed. Ctrl, Shift, and Ctrl+Shift tag
+variants retain their normal toggle-view, tag, and toggle-tag behaviour.
+
+Apply from the repository root with:
+
+    git apply patch-custom/dwm-toggleview-6.4.diff
+
+Then rebuild and restart dwm.
+
+---
+ config.h |  2 +-
+ dwm.c    | 10 ++++++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/config.h b/config.h
+index e670d79..0000000 100644
+--- a/config.h
++++ b/config.h
+@@ -41,7 +41,7 @@ static const Layout layouts[] = {
+ #define MODKEY Mod1Mask
+ #define MODKY1 Mod4Mask
+ #define TAGKEYS(MKEY,KEY,TAG) \
+-	{ MKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
++	{ MKEY,                       KEY,      vieworprev,     {.ui = 1 << TAG} }, \
+ 	{ MKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+ 	{ MKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+ 	{ MKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+diff --git a/dwm.c b/dwm.c
+index 2c54e70..0000000 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -226,8 +226,9 @@ static int updategeom(void);
+ static void updatesizehints(Client *c);
+ static void updatestatus(void);
+ static void updatetitle(Client *c);
+ static void updatewindowtype(Client *c);
+ static void updatewmhints(Client *c);
++static void vieworprev(const Arg *arg);
+ static void view(const Arg *arg);
+ static Client *wintoclient(Window w);
+ static Monitor *wintomon(Window w);
+@@ -2105,6 +2106,15 @@ updatewindowtype(Client *c)
+ 	}
+ }
+ 
++void
++vieworprev(const Arg *arg)
++{
++	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
++		view(&(const Arg){ .ui = 0 });
++	else
++		view(arg);
++}
++
+ void
+ view(const Arg *arg)
+ {
