@@ -221,6 +221,7 @@ static void unmapnotify(XEvent *e);
 static void updatebarpos(Monitor *m);
 static void updatebars(void);
 static void updateclientlist(void);
+static void updatecclockworkspace(void);
 static int updategeom(void);
 static void updatenumlockmask(void);
 static void updatesizehints(Client *c);
@@ -262,7 +263,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	[PropertyNotify] = propertynotify,
 	[UnmapNotify] = unmapnotify
 };
-static Atom wmatom[WMLast], netatom[NetLast];
+static Atom wmatom[WMLast], netatom[NetLast], cclockworkspaceatom;
 static int running = 1;
 static Cur *cursor[CurLast];
 static Clr **scheme;
@@ -803,6 +804,7 @@ enternotify(XEvent *e)
 	if (m != selmon) {
 		unfocus(selmon->sel, 1);
 		selmon = m;
+		updatecclockworkspace();
 	} else if (!c || c == selmon->sel)
 		return;
 	focus(c);
@@ -865,6 +867,7 @@ focusmon(const Arg *arg)
 	unfocus(selmon->sel, 0);
 	selmon = m;
 	focus(NULL);
+	updatecclockworkspace();
 }
 
 void
@@ -1598,6 +1601,7 @@ setup(void)
 	updategeom();
 	/* init atoms */
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
+	cclockworkspaceatom = XInternAtom(dpy, "_CCLOCK_WORKSPACE", False);
 	wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
 	wmatom[WMDelete] = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
 	wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False);
@@ -1643,6 +1647,7 @@ setup(void)
 	XSelectInput(dpy, root, wa.event_mask);
 	grabkeys();
 	focus(NULL);
+	updatecclockworkspace();
 }
 
 void
@@ -1815,6 +1820,7 @@ toggleview(const Arg *arg)
 
 		focus(NULL);
 		arrange(selmon);
+		updatecclockworkspace();
 	}
 }
 
@@ -1918,6 +1924,27 @@ updateclientlist()
 			XChangeProperty(dpy, root, netatom[NetClientList],
 				XA_WINDOW, 32, PropModeAppend,
 				(unsigned char *) &(c->win), 1);
+}
+
+static void
+updatecclockworkspace(void)
+{
+	char workspace[256];
+	unsigned int i;
+	size_t length = 0;
+
+	workspace[0] = '\0';
+	for (i = 0; i < LENGTH(tags); i++) {
+		if (!(selmon->tagset[selmon->seltags] & 1 << i))
+			continue;
+		length += snprintf(workspace + length, sizeof(workspace) - length,
+			"%s%s", length ? "+" : "", tags[i]);
+		if (length >= sizeof(workspace))
+			break;
+	}
+	XChangeProperty(dpy, root, cclockworkspaceatom,
+		XInternAtom(dpy, "UTF8_STRING", False), 8, PropModeReplace,
+		(unsigned char *)workspace, (int)strlen(workspace));
 }
 
 int
@@ -2151,6 +2178,7 @@ view(const Arg *arg)
 
 	focus(NULL);
 	arrange(selmon);
+	updatecclockworkspace();
 }
 
 Client *

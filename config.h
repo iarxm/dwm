@@ -69,8 +69,8 @@ static const char *dmu_cmb[]   = { "dmux", NULL };
 static const char *dmu_pas[]   = { "passmenu",  DMU_DEFS, NULL };
 static const char *dmu_blu[]   = { "dmenu-bluetooth",      "-l", "20", DMU_DEFS, NULL };
 static const char *dmu_nwm[]   = { "networkmanager_dmenu", "-l", "20", DMU_DEFS, NULL };
+static const char *clo_tog[]   = { "cclockctl", "toggle", NULL };
 static const char *termcmd[]   = { "st", "tmux", NULL };
-static const char *trm_tmu[]   = { "st", "tmux", NULL };
 static const char *trm_bas[]   = { "st", NULL };
 static const char *app_qba[]   = { "qb", NULL };
 static const char *app_gpt[]   = { "qb", "w.gpt", NULL };
@@ -103,6 +103,7 @@ static const Key keys[] = {
 	{ MODKEY|MODKY1,                XK_s,      spawn,          {.v = sys_sle } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+    { MODKY1,                       XK_t,      spawn,          {.v = clo_tog } },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
@@ -152,3 +153,6 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
+
+/*static const char *trm_tmu[]   = { "st", "tmux", NULL };*/
+/*static const char *clo_tog[]   = { "cclockctl", "toggle", NULL };*/
